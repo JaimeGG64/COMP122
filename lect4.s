@@ -1,0 +1,3 @@
+MOV r3, #9
+ADDS r1, r3, #10
+SWI 0x11
