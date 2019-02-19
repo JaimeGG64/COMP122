@@ -6,7 +6,7 @@
         .data
 to_print:
         ;; .asciz : string that ends in a null byte
-	.asciz "Hello, world!"
+	.asciz "Hello, Jaime García"
 
         ;; text section - executable portion of
         ;; your code
