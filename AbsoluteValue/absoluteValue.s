@@ -9,15 +9,11 @@ swi 0x6c @SWI_RdInt
 mov r1,r0
 mov r0,#1
 
-sub r0,r2,r1
+cmp r1, #0
+sub r0,r2,r1 @manipulate the value
 
-mov r1,r0
+movmi r1,r0
 mov r0,#1
-
-@ mvn r1, r0
-
-@ cmp   r1, #0
-@ movle r1, 
 
 swi 0x6b @SWI_PrInt
 swi 0x68 @close file
