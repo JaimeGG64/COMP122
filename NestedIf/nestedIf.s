@@ -9,14 +9,16 @@ swi 0x6c @SWI_RdInt
 mov r1,r0
 mov r0,#1
 
-CMP   r1, #10   ; if (x <= 0)
-MOVLE r1, #0
-MOVGT r1, #2   ; else x = 1;
+CMP   r1, #10   ; if (x <= 10)
+bmi func1
+b func2   ; else x = 1;
 
-@ compare
-@     CMP   r1, #6   
-@     MOVLE r1, #0
-@     MOVGT r1, #1
+func1:
+   cmp r1, #6
+   mov r1, #0
+   mov r1, #1
+func2:
+   mov r1, #2
 
 swi 0x6b @SWI_PrInt
 swi 0x68 @close file
