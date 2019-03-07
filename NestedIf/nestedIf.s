@@ -25,8 +25,3 @@ func2:
 print: 
    swi 0x6b @SWI_PrInt
    swi 0x11 @exit
-
-@ Use the Java code above to write equivalent ARM assembly code for it
-@ You need to use branch and conditional branches
-@ unconditional branch   b
-@ conditional branch       bpl, bmi, beq ,....
