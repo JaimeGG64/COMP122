@@ -1,4 +1,4 @@
-File: .asciz "INT.TXT"
+File: .asciz "integers.txt"
 
 ldr r0,=File @ set Name for input file
 mov r1,#0 @ mode is input
