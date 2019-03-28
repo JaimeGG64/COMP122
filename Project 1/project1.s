@@ -1,9 +1,9 @@
 @ Name: Jaime Garcia
 @ Date: 03-28-2019
 
-@ r3 will be handle the loop count
+@ r3 will hold the SWI_Open value
 @ r4 will be 'x'
-@ r5 
+@ r5 keep track of int
 
 File: .asciz "integers.txt"
 InFileError: .asciz "Unable to open file"
@@ -36,8 +36,9 @@ read_integers:
     mov r0,r3
     mov r1,#0
     swi SWI_RdInt
-    cmp r0, #0
     adds r5, r5, #1
+    cmp r0, #3
+    beq _exit
     b read_integers
 
 check_num_of_integers:
