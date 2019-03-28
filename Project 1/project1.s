@@ -19,16 +19,15 @@ check_num_of_integers_Message: .asciz " integers"
 .equ SWI_Close, 0x68
 
 _start:
-    ldr r0,=File @ set Name for input file
-    mov r1,#0 @ mode is input
-    swi SWI_Open @open file
-    mov r3,r0 @store x
-    mov r2,r0
+    ldr r0,=File
+    mov r1,#0
+    swi SWI_Open
+    mov r3,r0
     swi SWI_RdInt
-    mov r2,r0
+    mov r2,r0 @temporary input
+    mov r5,r0 @assign 'x'
     mov r0,#0
-    mov r5,#0
-    cmp r0, #0 @prepare to compare r1
+    cmp r0, #0
     beq read_integers
 
 
@@ -36,12 +35,12 @@ read_integers:
     mov r0,r3
     mov r1,#0
     swi SWI_RdInt
-    adds r5, r5, #1
+    mov r2,r0
+    adds r4, r4, #1
     cmp r0, #3
     beq _exit
     b read_integers
 
-check_num_of_integers:
 num_of_int_greater_than_x:
 
 
