@@ -1,3 +1,10 @@
+@ Name: Jaime Garcia
+@ Date: 03-28-2019
+
+@ r3 will be handle the loop count
+@ r4 will be 'x'
+@ r5 
+
 File: .asciz "integers.txt"
 InFileError: .asciz "Unable to open file"
     .align
@@ -15,24 +22,28 @@ _start:
     ldr r0,=File @ set Name for input file
     mov r1,#0 @ mode is input
     swi SWI_Open @open file
-    mov r4,r0
+    mov r3,r0 @store x
+    mov r2,r0
     swi SWI_RdInt
     mov r2,r0
     mov r0,#0
-    cmp r1, #10 @prepare to compare r1
-    blt read_integers
+    mov r5,#0
+    cmp r0, #0 @prepare to compare r1
+    beq read_integers
+
 
 read_integers:
-    mov r0,r4
+    mov r0,r3
     mov r1,#0
     swi SWI_RdInt
-    mov r0,#0
-    cmp r3, #45
+    cmp r0, #0
+    adds r5, r5, #1
     b read_integers
 
 check_num_of_integers:
 num_of_int_greater_than_x:
-set_x:
+
+
 highest_int:
 
 _exit:
