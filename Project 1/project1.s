@@ -38,19 +38,23 @@ read_integers:
     swi SWI_RdInt
     mov r2,r0
     adds r4, r4, #1
-    cmp r2, r7
-    bgt highest_int
     cmp r0, #3
     beq _exit
+    cmp r2, r7
+    bgt highest_int
+    cmp r2, r5
+    bgt num_of_int_greater_than_x
     b read_integers
 
 highest_int:
     mov r7, r2
-    cmp r7, r2
+    cmp r2, r5
+    bgt num_of_int_greater_than_x
     b read_integers
 
 num_of_int_greater_than_x:
-
+    adds r6, r6, #1
+    b read_integers
 
 _exit:
     swi SWI_PrInt @SWI_PrInt
