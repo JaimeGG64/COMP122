@@ -23,6 +23,8 @@ _start:
     mov r1,#0
     swi SWI_Open
     mov r3,r0
+    cmp r0,#-1
+    beq no_file
     swi SWI_RdInt
     mov r2, r0 @temporary input
     mov r5, r0 @assign 'x'
@@ -55,6 +57,10 @@ highest_int:
 num_of_int_greater_than_x:
     adds r6, r6, #1
     b read_integers
+
+no_file:
+    mov r1,#0
+    swi SWI_Exit @exit
 
 _exit:
     swi SWI_PrInt @SWI_PrInt
