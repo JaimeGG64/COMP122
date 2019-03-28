@@ -24,8 +24,9 @@ _start:
     swi SWI_Open
     mov r3,r0
     swi SWI_RdInt
-    mov r2,r0 @temporary input
-    mov r5,r0 @assign 'x'
+    mov r2, r0 @temporary input
+    mov r5, r0 @assign 'x'
+    mov r7, r5
     mov r0,#0
     cmp r0, #0
     beq read_integers
@@ -37,14 +38,19 @@ read_integers:
     swi SWI_RdInt
     mov r2,r0
     adds r4, r4, #1
+    cmp r2, r7
+    bgt highest_int
     cmp r0, #3
     beq _exit
     b read_integers
 
+highest_int:
+    mov r7, r2
+    cmp r7, r2
+    b read_integers
+
 num_of_int_greater_than_x:
 
-
-highest_int:
 
 _exit:
     swi SWI_PrInt @SWI_PrInt
