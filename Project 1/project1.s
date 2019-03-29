@@ -15,7 +15,7 @@
 @ *****************End Special Notes*****************
 
 File: .asciz "integers.txt"
-FileError: .asciz "Unable to open file"
+FileError: .asciz "Unable to find file"
 EmptyFileError: .asciz "Empty File"
 InFileHandle: .word 0
 
@@ -110,6 +110,7 @@ num_of_int_greater_than_x:
 no_file:
     @ Prints a Message if there is no file
     ldr r0, =FileError
+    swi SWI_Print_String
     swi SWI_Exit
 
 print_full_message:
