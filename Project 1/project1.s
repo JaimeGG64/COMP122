@@ -1,6 +1,7 @@
 @ Name: Jaime Garcia
 @ Date: 03-28-2019
 
+@ ******************Notes******************
 @ r3 will hold the SWI_Open value
 @ r4 will be 'x'
 @ r5 keep track of int
@@ -9,7 +10,14 @@ File: .asciz "integers.txt"
 InFileError: .asciz "Unable to open file"
     .align
 InFileHandle: .word 0
-check_num_of_integers_Message: .asciz " integers"
+
+check_num_of_integers_message_pt_one: .asciz "File contains "
+check_num_of_integers_message_pt_two: .asciz " integers, "
+set_x_message: .asciz "First integer x is "
+greater_than_x_message_pt_one: .asciz ", Thare are " 
+greater_than_x_message_pt_two: .asciz " integers greater than "
+largest_integer_message: .asciz " and the maximum positive integer is "
+
 .equ SWI_Exit, 0x11
 .equ SWI_Print_String, 0x02
 .equ SWI_Open, 0x66
@@ -41,7 +49,7 @@ read_integers:
     mov r2,r0
     adds r4, r4, #1
     cmp r0, #3
-    beq _exit
+    beq print_full_output
     cmp r2, r7
     bgt highest_int
     cmp r2, r5
@@ -62,8 +70,39 @@ no_file:
     mov r1,#0
     swi SWI_Exit @exit
 
-_exit:
-    swi SWI_PrInt @SWI_PrInt
+print_full_output:
+    ldr r0, =check_num_of_integers_message_pt_one
     swi SWI_Print_String
-    swi SWI_Close @close file
-    swi SWI_Exit @exit
+    mov r1,r4
+    mov r0,#1
+    swi SWI_PrInt
+    ldr r0, =check_num_of_integers_message_pt_two
+    swi SWI_Print_String
+
+    ldr r0, =set_x_message
+    swi SWI_Print_String
+    mov r1,r5
+    mov r0,#1
+    swi SWI_PrInt
+
+    ldr r0, =greater_than_x_message_pt_one
+    swi SWI_Print_String
+    mov r1,r6
+    mov r0,#1
+    swi SWI_PrInt
+    ldr r0, =greater_than_x_message_pt_two
+    swi SWI_Print_String
+    mov r1,r5
+    mov r0,#1
+    swi SWI_PrInt
+
+    ldr r0, =largest_integer_message
+    swi SWI_Print_String
+    mov r1,r7
+    mov r0,#1
+    swi SWI_PrInt
+
+_exit:
+    
+    swi SWI_Close
+    swi SWI_Exit
