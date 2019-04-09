@@ -4,7 +4,7 @@
 
 	.data
 array:
-	.word 78, 23, 90, 42, 123
+	.word 3,-7,2,-2,10
 
 	.text
 	.global _start
@@ -26,6 +26,7 @@ _start:
 	;; r3: number of elements left to print
 	ldr r2, =array 		; start on first element
 	mov r3, #5 		; 5 elements to print
+    mov r4, #0
 
 loop_begin:
 	;; print current element
@@ -40,9 +41,12 @@ loop_begin:
 	;; increment to the next array element
 	;; add 4 because words are 4 bytes long
 	add r2, r2, #4
+
+    add r4, r1, r4
 	
 	;; decrement number of elements left
 	sub r3, r3, #1
+
 
 	;; if we have none left, we're done
 	cmp r3, #0
