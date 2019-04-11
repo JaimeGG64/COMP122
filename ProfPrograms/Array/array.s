@@ -30,19 +30,15 @@ _start:
 
 loop_begin:
 	;; print current element
-	mov r0, #1 		; write to standard output
 	ldr r1, [r2] 		; read integer from array
-	swi SWI_Print_Int	; print the integer
 
 	;; print a newline
-	mov r0, #'\n
-	swi SWI_Print_Char
 
 	;; increment to the next array element
 	;; add 4 because words are 4 bytes long
 	add r2, r2, #4
 
-    add r4, r1, r4
+    add r4, r1, r4 ;; Adds up the integers
 	
 	;; decrement number of elements left
 	sub r3, r3, #1
@@ -50,9 +46,14 @@ loop_begin:
 
 	;; if we have none left, we're done
 	cmp r3, #0
+    
 	bne loop_begin		; while (counter != 0)
 
-	;; exit the program
+    mov r0, #1
+    mov r1, r4
+    swi SWI_Print_Int
+	
+    ;; exit the program
 	swi SWI_Exit
 	.end
 	
