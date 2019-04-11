@@ -1,15 +1,21 @@
-ldr r0,=data ;point to string
+.equ SWI_PrChr, 0x00
+.equ SWI_Exit, 0x11
 
-ldr r1,[r0]  ;pick up word
+data:
+    .asciz "ABCDE"
 
-ldrb r2,[r0] ;pick up first byte
+_start:
+    ldr r2,=data @point to string
+    mov r3,#5 @set the length of the String
 
-add r0,r0,#1 ;index to next
+loop:
+    ldrb r0,[r2] @pick up first byte
+    swi SWI_PrChr @prints the single characters
+    add r2,r2,#1 @index to next
+    sub r3,r3,#1 @Subtracts the point
+    cmp r3, #0 @prepare to compare
+    bne loop @If not equal return to loop
+    b _exit @Else exit
 
-;ldr r1,[r0]  won't work...not on word boundary
-
-ldrb r2,[r0]  ;pick up second byte
-
-swi 0x11
-
-data: .asciz "ABCD"
+_exit:
+    swi SWI_Exit @terminate the program
