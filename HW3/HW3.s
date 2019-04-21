@@ -62,5 +62,17 @@ print:
 	strb r0,[r1]
 	mov pc, r14
 
+save_changes:
+	sub r1, r1, r5
+	mov r4, r1
+	ldr r0, =OutFileName
+	mov r1,#1 
+	swi SWI_Open 
+	mov r1,r4 
+	swi SWI_PrStr 
+	mov pc, r14
+
 _exit:
+    bl save_changes
+    swi SWI_Close
     swi SWI_Exit
