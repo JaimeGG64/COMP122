@@ -28,13 +28,9 @@ _start:
     ldr r0,=InFileName
     mov r1,#0
     swi SWI_Open
-    mov r3, r0
-    @ str r0,[r1]
-    ;; load empty array 
     ldr r1,=CharArray
     mov r2,#80
     swi SWI_RdStr
-    mov r4, r1
 
     ldr r0,=OutFileName
     mov r1,#1
@@ -42,4 +38,3 @@ _start:
     mov r1,r4
 	swi SWI_PrStr
     swi SWI_Exit
-    ;;str r0,[r3]
