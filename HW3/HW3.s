@@ -10,7 +10,7 @@ OutFileName:
 OutFileError: .asciz "No File\n"
     .align
 
-HandleFile: .skip 80
+HandleFile: .skip 60
 
 .equ SWI_Print_Char, 0x00
 .equ SWI_Print_String, 0x02
@@ -42,7 +42,6 @@ _start:
 
 read_sentance:
     ldrb r0, [r1]
-
     bl print_to_console
     add r1,r1, #1
     add r5,r5, #1
@@ -69,12 +68,17 @@ capitalized_letter:
     add r5,r5,#1
     b read_sentance
 
+capitalized_course:
+    add r1,r1,#3
+
 print_to_console:
+    cmp r0, #-32
+    beq _exit
     swi SWI_Print_Char
 	strb r0,[r1]
 	mov pc, r14
 
-save_changes:
+save_to_file:
 	sub r1, r1, r5
 	mov r4, r1
 	ldr r0, =OutFileName
@@ -85,6 +89,6 @@ save_changes:
 	mov pc, r14
 
 _exit:
-    bl save_changes
+    bl save_to_file
     swi SWI_Close
     swi SWI_Exit
