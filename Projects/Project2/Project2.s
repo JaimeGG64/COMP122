@@ -69,6 +69,10 @@ read_sentance:
     cmp r0, #32
     beq capitalized_letter
     
+    cmp r0, #46
+    beq convert_to_asterisk
+    cmp r0, #44
+    beq convert_to_asterisk
     cmp r4, #0
     bne read_sentance
     b _exit
@@ -90,6 +94,14 @@ capitalized_letter:
     bl print_to_console
 
     @ This is advancing through the string
+    add r1,r1,#1
+    add r5,r5,#1
+    b read_sentance
+
+convert_to_asterisk:
+    ldrb r0, [r1]
+    mov r0,#42
+    bl print_to_console
     add r1,r1,#1
     add r5,r5,#1
     b read_sentance
