@@ -2,3 +2,4 @@ input.txt
 output.txt
 *.class
 .DS_Store
+.vscode/
