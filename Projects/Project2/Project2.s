@@ -66,7 +66,7 @@ read_sentance:
     sub r4, r4, #1
 
     @ If '.' is dedected then the program will branch to 'capitalized_letter'
-    cmp r0, #46
+    cmp r0, #32
     beq capitalized_letter
     
     cmp r4, #0
