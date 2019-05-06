@@ -14,7 +14,7 @@ OutFileError: .asciz "No File\n"
     .align
 
 @ Set length for file
-HandleFile: .skip 60
+HandleFile: .skip 130
 
 @ The swi codes
 .equ SWI_Print_Char, 0x00
@@ -26,6 +26,11 @@ HandleFile: .skip 60
 .equ SWI_Open, 0x66
 .equ SWI_Close, 0x68
 .equ SWI_PrStr, 0x69
+
+@ #42 = *
+@ #46 = .
+@ #44 = ,
+@ #58 = ;
 
 _start:
     @ Loads Up the file
@@ -39,10 +44,10 @@ _start:
 
     @ Set Up how program is going to read the .txt
     ldr r1,=HandleFile
-    mov r2,#80
+    mov r2,#130
     swi SWI_RdStr
-    mov r4, #80
-    cmp r4,#80
+    mov r4, #130
+    cmp r4,#130
 
     @ Once everything is set it branch to 'read_sentance'
     b read_sentance
@@ -56,10 +61,9 @@ _start:
 read_sentance:
     @ r1 is read to r0
     ldrb r0, [r1]
-    
-    @ The value in 'r0' with an ascii value will print to the console
+
     bl print_to_console
-    
+
     @ 'r1' will advance throught the string inside 'input.txt'
     add r1,r1, #1
     add r5,r5, #1
@@ -69,25 +73,20 @@ read_sentance:
     cmp r0, #32
     beq capitalized_letter
     
-    cmp r0, #46
-    beq convert_to_asterisk
     cmp r0, #44
     beq convert_to_asterisk
+    cmp r0, #46
+    beq convert_to_asterisk
+    cmp r0, #59
+    beq convert_to_asterisk
+
     cmp r4, #0
     bne read_sentance
+    bl print_to_console
     b _exit
 
 capitalized_letter:
     ldrb r0, [r1]
-    
-    @ It will check if the next character is ' '
-    cmp r0, #32
-    
-    @ This will continue throught the string
-    addeq r1, r1, #1
-	addeq r5, r5, #1
-    swieq SWI_Print_Char
-    beq capitalized_letter
     
     @ When suptracing an ASCII lower case letter by 32 it will capitalize the letter
     sub r0,r0,#32
