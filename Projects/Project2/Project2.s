@@ -27,11 +27,6 @@ HandleFile: .skip 130
 .equ SWI_Close, 0x68
 .equ SWI_PrStr, 0x69
 
-@ #42 = *
-@ #46 = .
-@ #44 = ,
-@ #58 = ;
-
 _start:
     @ Loads Up the file
     ldr r0,=InFileName
@@ -62,6 +57,13 @@ read_sentance:
     @ r1 is read to r0
     ldrb r0, [r1]
 
+    cmp r0, #44
+    beq convert_to_asterisk
+    cmp r0, #46
+    beq convert_to_asterisk
+    cmp r0, #59
+    beq convert_to_asterisk
+
     bl print_to_console
 
     @ 'r1' will advance throught the string inside 'input.txt'
@@ -73,12 +75,6 @@ read_sentance:
     cmp r0, #32
     beq capitalized_letter
     
-    cmp r0, #44
-    beq convert_to_asterisk
-    cmp r0, #46
-    beq convert_to_asterisk
-    cmp r0, #59
-    beq convert_to_asterisk
 
     cmp r4, #0
     bne read_sentance
@@ -87,10 +83,13 @@ read_sentance:
 
 capitalized_letter:
     ldrb r0, [r1]
-    
+    cmp r0, #96
     @ When suptracing an ASCII lower case letter by 32 it will capitalize the letter
-    sub r0,r0,#32
-    bl print_to_console
+    subgt r0,r0,#32
+    addle r1,r1,#1
+    addle r5,r5,#1
+    ble read_sentance
+    b print_to_console
 
     @ This is advancing through the string
     add r1,r1,#1
@@ -106,7 +105,6 @@ convert_to_asterisk:
     b read_sentance
 
 print_to_console:
-    @ This will prevent the console and outfile to have garbled text
     cmp r0, #-32
     beq _exit
     
