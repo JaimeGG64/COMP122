@@ -1,7 +1,7 @@
 @ Author: Jaime Garcia Garcia
 @ Name: Project 2
 @ Date: 5/07/2019
-@ Purpose: It will capitalized letter in the beginning of a sentance and course name. 
+@ Purpose: The program open a 'input.txt' and modify the string by capitalizing every letter and ching punctuations to '*'
 
 InFileName: 
     .asciz "input.txt"
@@ -16,7 +16,7 @@ OutFileError: .asciz "No File\n"
 @ Set length for file
 HandleFile: .skip 130
 
-@ The swi codes
+@ The SWI codes
 .equ SWI_Print_Char, 0x00
 .equ SWI_Print_String, 0x02
 .equ SWI_RdStr, 0x6a
@@ -57,6 +57,7 @@ read_sentance:
     @ r1 is read to r0
     ldrb r0, [r1]
 
+    @ If the program encounters puncations via the ASCII value it will branch to 'convert_to_asterisk'
     cmp r0, #44
     beq convert_to_asterisk
     cmp r0, #46
@@ -64,6 +65,7 @@ read_sentance:
     cmp r0, #59
     beq convert_to_asterisk
 
+    @ Else it print the string to console
     bl print_to_console
 
     @ 'r1' will advance throught the string inside 'input.txt'
@@ -71,10 +73,10 @@ read_sentance:
     add r5,r5, #1
     sub r4, r4, #1
 
-    @ If '.' is dedected then the program will branch to 'capitalized_letter'
+    @ If ' ' is dedected then the program will branch to 'capitalized_letter'
     cmp r0, #32
     beq capitalized_letter
-    
+
 
     cmp r4, #0
     bne read_sentance
@@ -82,32 +84,46 @@ read_sentance:
     b _exit
 
 capitalized_letter:
+    @ Load string to r0
     ldrb r0, [r1]
+
+    @ Check if string is greater than 96 because values after it are lowercase letters
     cmp r0, #96
+
     @ When suptracing an ASCII lower case letter by 32 it will capitalize the letter
     subgt r0,r0,#32
+
+    @ It will also advance throught the string after capitalizing
     addle r1,r1,#1
     addle r5,r5,#1
     ble read_sentance
     b print_to_console
 
-    @ This is advancing through the string
+    @ Advancing through the string
     add r1,r1,#1
     add r5,r5,#1
     b read_sentance
 
 convert_to_asterisk:
+    @ Load the charcter to r0
     ldrb r0, [r1]
+
+    @ Override the punctuation with a '*'
     mov r0,#42
     bl print_to_console
+
+    @ Advancing through the string
     add r1,r1,#1
     add r5,r5,#1
+
+    @ Return to 'read_sentance'
     b read_sentance
 
 print_to_console:
+    @ Check if the program over subtracte
     cmp r0, #-32
     beq _exit
-    
+
     @ if (r1 != -32) Then the character will print to the console
     swi SWI_Print_Char
 	strb r0,[r1]
