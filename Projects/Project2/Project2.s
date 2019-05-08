@@ -6,6 +6,7 @@
 InFileName: 
     .asciz "input.txt"
 InFileError: .asciz "No File\n"
+InEmptyFile: .asciz "Blank File\n"
     .align
 
 OutFileName: 
@@ -159,3 +160,11 @@ no_file:
     ldr r0, =InFileError
     swi SWI_Print_String
     swi SWI_Exit
+
+blank_file:
+    @ Check if r0 is 0 and terminate the program else it will return to reading the sentence
+    cmp r0, #0
+    ldreq r0, =InEmptyFile
+    swieq SWI_Print_String
+    swieq SWI_Exit
+    mov pc, r14
